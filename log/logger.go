@@ -31,8 +31,4 @@ type Logger interface {
 	WithField(key string, value interface{}) Logger
 	// WithFields 向日志增加多个自定义字段
 	WithFields(fields Fields) Logger
-	// WithError 向日志增加error错误类型字段
-	WithError(err error) Logger
-	// Named 向日志器增加标题
-	Named(name string) Logger
 }
