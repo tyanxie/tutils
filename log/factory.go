@@ -22,7 +22,10 @@ const (
 	defaultMaxBackups = 10           // 默认文件最大保存数量：10个
 )
 
-var defaultConfigs = []*Config{{Type: "console", Level: "debug"}} // 默认配置，仅在终端输出Debug以上等级的日志
+var (
+	defaultConfigs     = []*Config{{Type: "console", Level: "debug"}}           // 默认配置，仅在终端输出Debug以上等级的日志
+	defaultTimeEncoder = zapcore.TimeEncoderOfLayout("2006-01-02 15:04:05.000") // 默认时间格式化
+)
 
 // Config 日志配置
 type Config struct {
@@ -60,7 +63,7 @@ func NewWithCallerSkip(skip int, configs ...*Config) (Logger, error) {
 	}
 	hasConsole := false
 	cores := make([]zapcore.Core, 0)
-	filenames := make(map[string]struct{}, 0)
+	filenames := make(map[string]struct{})
 	for _, cnf := range configs {
 		if cnf.Level == "" {
 			cnf.Level = "info"
@@ -73,11 +76,12 @@ func NewWithCallerSkip(skip int, configs ...*Config) (Logger, error) {
 		switch cnf.Type {
 		case OutputTypeConsole:
 			if !hasConsole {
+				// 创建日志编码器
 				ecnf := zap.NewProductionEncoderConfig()
-				ecnf.EncodeTime = zapcore.ISO8601TimeEncoder
+				ecnf.EncodeTime = defaultTimeEncoder
 				ecnf.EncodeLevel = zapcore.CapitalColorLevelEncoder
 				enc := zapcore.NewConsoleEncoder(ecnf)
-
+				// 创建日志核心
 				core := zapcore.NewCore(enc, zapcore.AddSync(os.Stdout), lvl)
 				cores = append(cores, core)
 				hasConsole = true
@@ -116,7 +120,7 @@ func NewWithCallerSkip(skip int, configs ...*Config) (Logger, error) {
 			}
 			// 创建日志编码器
 			ecnf := zap.NewProductionEncoderConfig()
-			ecnf.EncodeTime = zapcore.ISO8601TimeEncoder
+			ecnf.EncodeTime = defaultTimeEncoder
 			ecnf.EncodeLevel = zapcore.CapitalLevelEncoder
 			enc := zapcore.NewConsoleEncoder(ecnf)
 			// 创建日志核心
