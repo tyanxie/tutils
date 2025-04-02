@@ -10,16 +10,15 @@ import (
 	"net"
 	"os"
 	"strconv"
+	"sync/atomic"
 	"time"
-
-	"go.uber.org/atomic"
 )
 
 var (
-	ip       string                // 机器ip地址进过计算后得出的hash字符串
-	pid      string                // 进程pid
-	ipAndPid string                // 机器ip和进程pid拼接后的字符串
-	seq      = atomic.NewUint32(0) // 自增序列
+	ip       string        // 机器ip地址进过计算后得出的hash字符串
+	pid      string        // 进程pid
+	ipAndPid string        // 机器ip和进程pid拼接后的字符串
+	seq      atomic.Uint32 // 自增序列
 )
 
 func init() {
@@ -43,7 +42,7 @@ func init() {
 	}
 	addrBytes := addrBuf.Bytes()
 	var addrHash uint32 = 0
-	for i := 0; i < len(addrBytes); i++ {
+	for i := range len(addrBytes) {
 		addrHash = uint32(addrBytes[i]) + (addrHash << 6) + (addrHash << 16) - addrHash
 	}
 	ip = strconv.FormatUint(uint64(addrHash), 16)
@@ -60,7 +59,7 @@ func Generate() string {
 	ts := strconv.FormatInt(time.Now().UnixMilli(), 36)
 	buf.WriteString(ts)
 	// 自增序列
-	curr := seq.Inc()
+	curr := seq.Add(1)
 	buf.WriteString(strconv.FormatUint(uint64(curr), 36))
 	return buf.String()
 }

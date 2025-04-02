@@ -1,3 +1,4 @@
+// Package crypto sm4国密对称加密工具包
 package crypto
 
 import (

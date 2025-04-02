@@ -1,3 +1,4 @@
+// Package crypto sm2国密非对称加密工具包
 package crypto
 
 import (
@@ -12,9 +13,9 @@ import (
 )
 
 /*
-本仓库使用开源库：github.com/ZZMarquis/gm
+本仓库使用开源库：github.com/tjfoc/gmsm
 
-该开源库中如何希望将sm2公私钥导出为字节数组、16进制字符串、base64字符串等，需要使用到该库的`x509`包的类似如下函数：
+该开源库中如果希望将sm2公私钥导出为字节数组、16进制字符串、base64字符串等，需要使用到该库的`x509`包的类似如下函数：
 x509.ReadPrivateKeyFromHex
 x509.WritePrivateKeyToHex
 x509.ReadPublicKeyFromHex

@@ -1,3 +1,4 @@
+// Package crypto triple-des(3des)加密工具包
 package crypto
 
 import (

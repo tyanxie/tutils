@@ -1,3 +1,4 @@
+// Package crypto ecb加密模式工具包
 package crypto
 
 import (

@@ -1,3 +1,4 @@
+// Package crypto 填充方式工具包
 package crypto
 
 import (
@@ -12,12 +13,18 @@ import (
 但这些并不影响判断填充长度，因此这四种方法都统一使用PKCS7的实现方式来做。
 */
 
+// 填充方式枚举
 const (
-	PaddingPkcs5    = "pkcs5"    // 填充方式：pkcs5（块大小为8bytes的pkcs7填充）
-	PaddingPkcs7    = "pkcs7"    // 填充方式：pkcs7
-	PaddingZero     = "zero"     // 填充方式：0填充
-	PaddingAnsix923 = "ansix923" // 填充方式：ansix923（除最后一个字节外全部填充0的pkcs7填充）
-	PaddingIso10126 = "iso10126" // 填充方式：iso10126（除最后一个字节外全部填充随机数的pkcs7填充）
+	// PaddingPkcs5 pkcs5（块大小为8bytes的pkcs7填充）
+	PaddingPkcs5 = "pkcs5"
+	// PaddingPkcs7 pkcs7
+	PaddingPkcs7 = "pkcs7"
+	// PaddingZero 0填充
+	PaddingZero = "zero"
+	// PaddingAnsix923 ansix923（除最后一个字节外全部填充0的pkcs7填充）
+	PaddingAnsix923 = "ansix923"
+	// PaddingIso10126 iso10126（除最后一个字节外全部填充随机数的pkcs7填充）
+	PaddingIso10126 = "iso10126"
 )
 
 var (
