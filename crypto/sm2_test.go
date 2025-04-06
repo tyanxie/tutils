@@ -88,7 +88,7 @@ func Test_CreateSm2PublicKeyWithBase64(t *testing.T) {
 	}
 }
 
-func Test_Sm2EncryptDecrypt(t *testing.T) {
+func Test_Sm2EncryptDecryptAsn1(t *testing.T) {
 	plaintext := []byte("Hello World")
 	tests := []struct {
 		name string
@@ -99,18 +99,18 @@ func Test_Sm2EncryptDecrypt(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			ciphertext, err := Sm2Encrypt(publicKey, plaintext, tt.mode)
+			ciphertext, err := Sm2EncryptAsn1(publicKey, plaintext, tt.mode)
 			if err != nil {
-				t.Errorf("Sm2Encrypt() error = %v", err)
+				t.Errorf("Sm2EncryptAsn1() error = %v", err)
 				return
 			}
-			newPlaintext, err := Sm2Decrypt(privateKey, ciphertext, tt.mode)
+			newPlaintext, err := Sm2DecryptAsn1(privateKey, ciphertext, tt.mode)
 			if err != nil {
-				t.Errorf("Sm2Decrypt() error = %v", err)
+				t.Errorf("Sm2DecryptAsn1() error = %v", err)
 				return
 			}
 			if !reflect.DeepEqual(plaintext, newPlaintext) {
-				t.Errorf("Sm2Encrypt() and Sm2Decrypt() got = %v, want %v", newPlaintext, plaintext)
+				t.Errorf("Sm2EncryptAsn1() and Sm2DecryptAsn1() got = %v, want %v", newPlaintext, plaintext)
 			}
 		})
 	}

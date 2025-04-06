@@ -52,11 +52,11 @@ func CreateSm2PublicKeyWithBase64(publicKey string) (*sm2.PublicKey, error) {
 	return x509.ReadPublicKeyFromHex(hex.EncodeToString(k))
 }
 
-// Sm2Encrypt sm2加密
+// Sm2EncryptAsn1 sm2加密并使用asn.1编码
 // @param publicKey 公钥
 // @param plaintext 明文内容
 // @param mode 密文顺序，参考github.com/tjfoc/gmsm/sm2包的枚举值，0为C1C3C2，1为C1C2C3
-func Sm2Encrypt(publicKey *sm2.PublicKey, plaintext []byte, mode int) ([]byte, error) {
+func Sm2EncryptAsn1(publicKey *sm2.PublicKey, plaintext []byte, mode int) ([]byte, error) {
 	ciphertext, err := sm2.Encrypt(publicKey, plaintext, rand.Reader, mode)
 	if err != nil {
 		return nil, fmt.Errorf("encrypt failed: %w", err)
@@ -68,11 +68,11 @@ func Sm2Encrypt(publicKey *sm2.PublicKey, plaintext []byte, mode int) ([]byte, e
 	return ciphertext, nil
 }
 
-// Sm2Decrypt sm2解密
+// Sm2DecryptAsn1 解析asn.1编码格式内容并使用sm2解密
 // @param privateKey 私钥
 // @param ciphertext 密文
 // @param mode 密文顺序，参考github.com/tjfoc/gmsm/sm2包的枚举值，0为C1C3C2，1为C1C2C3
-func Sm2Decrypt(privateKey *sm2.PrivateKey, ciphertext []byte, mode int) ([]byte, error) {
+func Sm2DecryptAsn1(privateKey *sm2.PrivateKey, ciphertext []byte, mode int) ([]byte, error) {
 	ciphertext, err := sm2.CipherUnmarshal(ciphertext)
 	if err != nil {
 		return nil, fmt.Errorf("unmarshal cipher failed: %w", err)
